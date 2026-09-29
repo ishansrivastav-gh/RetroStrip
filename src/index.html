@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" href="./src/css/style.css" />
+...
+<script type="module" src="./src/js/app.js"></script>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VintageSnap Studio // Gen-Z Developer Edition</title>
+  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&family=Permanent+Marker&family=Press+Start+2P&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="app" class="studio-layout">
+    <!-- Top Telemetry Bar -->
+    <header class="studio-header">
+      <div class="brand-title">
+        <span class="dot-indicator"></span>
+        <h1>VINTAGESNAP<span>_STUDIO_v2.6</span></h1>
+      </div>
+      <div class="telemetry-badges">
+        <span class="badge" id="badgeMode">MODE: POLAROID</span>
+        <span class="badge" id="badgeCanvas">CANVAS: 600x720@300DPI</span>
+        <span class="badge accent" id="badgeFps">FPS: 60</span>
+      </div>
+    </header>
+
+    <!-- Main Workspace Grid -->
+    <main class="studio-workspace">
+      <!-- Left Panel: Camera & Media Source -->
+      <section class="panel camera-panel">
+        <div class="panel-header">
+          <h2>[01] MEDIA_CAPTURE</h2>
+        </div>
+        <div class="camera-viewport">
+          <video id="webcam" autoplay playsinline muted></video>
+          <div class="camera-overlay" id="cameraOverlay">
+            <div class="reticle"></div>
+            <div class="countdown-display" id="countdownDisplay"></div>
+          </div>
+          <div class="flash-layer" id="flashLayer"></div>
+        </div>
+        <div class="camera-controls">
+          <button id="btnStartCam" class="btn btn-secondary">TOGGLE_CAM</button>
+          <button id="btnCaptureBurst" class="btn btn-primary">START_BURST_SEQUENCE</button>
+          <label class="btn btn-outline file-upload-btn">
+            UPLOAD_FILE
+            <input type="file" id="fileInput" accept="image/*" multiple hidden />
+          </label>
+        </div>
+      </section>
+
+      <!-- Center Panel: Interactive Canvas Studio -->
+      <section class="panel canvas-panel">
+        <div class="canvas-viewport-container">
+          <canvas id="studioCanvas"></canvas>
+        </div>
+      </section>
+
+      <!-- Right Panel: Inspector Controls -->
+      <section class="panel inspector-panel">
+        <div class="panel-header">
+          <h2>[02] INSPECTOR_CONTROLS</h2>
+        </div>
+        <div class="inspector-scroll">
+          
+          <!-- Mode Switcher -->
+          <div class="control-group">
+            <label class="control-label">LAYOUT_MODE</label>
+            <div class="btn-group">
+              <button class="btn btn-toggle active" data-mode="polaroid">POLAROID</button>
+              <button class="btn btn-toggle" data-mode="strip">PHOTO_STRIP</button>
+            </div>
+          </div>
+
+          <!-- Strip Count (if in Strip Mode) -->
+          <div class="control-group" id="groupStripCount" style="display: none;">
+            <label class="control-label">STRIP_FRAMES</label>
+            <div class="btn-group">
+              <button class="btn btn-toggle active" data-stripcount="3">3_SHOTS</button>
+              <button class="btn btn-toggle" data-stripcount="4">4_SHOTS</button>
+            </div>
+          </div>
+
+          <!-- Frames / Material Texture -->
+          <div class="control-group">
+            <label class="control-label">FRAME_MATERIAL</label>
+            <select id="selectFrame" class="select-input">
+              <option value="classic">Classic White Paper</option>
+              <option value="noir">Matte Noir Black</option>
+              <option value="y2k">Y2K Neon Glow</option>
+              <option value="holo">Holographic Cyber</option>
+              <option value="kraft">Recycled Kraft Paper</option>
+            </select>
+          </div>
+
+          <!-- Color LUT Filters -->
+          <div class="control-group">
+            <label class="control-label">COLOR_LUT_SHADER</label>
+            <select id="selectFilter" class="select-input">
+              <option value="none">Raw Natural (None)</option>
+              <option value="y2k_chrome">Y2K Chrome Vibrant</option>
+              <option value="vhs">90s VHS Camcorder</option>
+              <option value="film_35mm">Analog Film 35mm</option>
+              <option value="cyberpunk">Cyberpunk Neon</option>
+              <option value="mono">High Contrast Monochrome</option>
+            </select>
+          </div>
+
+          <!-- Film Grain & Light Leaks -->
+          <div class="control-group">
+            <label class="control-label">FILM_GRAIN (<span id="grainVal">15</span>%)</label>
+            <input type="range" id="inputGrain" min="0" max="100" value="15" class="slider" />
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">LIGHT_LEAK_EFFECT</label>
+            <div class="btn-group">
+              <button class="btn btn-toggle active" data-leak="none">NONE</button>
+              <button class="btn btn-toggle" data-leak="left">LEFT</button>
+              <button class="btn btn-toggle" data-leak="right">RIGHT</button>
+            </div>
+          </div>
+
+          <!-- Caption & Typography -->
+          <div class="control-group">
+            <label class="control-label">CAPTION_TEXT</label>
+            <input type="text" id="inputCaption" value="VINTAGESNAP 2026" class="text-input" />
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">CAPTION_FONT</label>
+            <select id="selectFont" class="select-input">
+              <option value="Permanent Marker">Permanent Marker</option>
+              <option value="Caveat">Caveat Handwritten</option>
+              <option value="Press Start 2P">Press Start 2P (Pixel)</option>
+              <option value="JetBrains Mono">JetBrains Mono</option>
+            </select>
+          </div>
+
+          <!-- Sticker Overlays -->
+          <div class="control-group">
+            <label class="control-label">ADD_STICKERS</label>
+            <div class="sticker-palette">
+              <button class="btn btn-sticker" data-sticker="⭐">⭐</button>
+              <button class="btn btn-sticker" data-sticker="🔥">🔥</button>
+              <button class="btn btn-sticker" data-sticker="⚡">⚡</button>
+              <button class="btn btn-sticker" data-sticker="🍒">🍒</button>
+              <button class="btn btn-sticker" data-sticker="✨">✨</button>
+              <button class="btn btn-sticker" data-sticker="2026">2026</button>
+            </div>
+          </div>
+
+          <!-- Export Section -->
+          <div class="control-group export-group">
+            <label class="control-label">[03] EXPORT_LAB</label>
+            <button id="btnDownloadPNG" class="btn btn-primary full-width">DOWNLOAD_DIGITAL_PNG</button>
+            <button id="btnDownloadPDF" class="btn btn-accent full-width">EXPORT_300DPI_PRINT_PDF</button>
+          </div>
+
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
