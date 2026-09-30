@@ -1,10 +1,10 @@
 {
-  "name": "vintagesnap-studio",
+  "name": "retrostrip",
   "version": "1.0.0",
   "description": "Gen-Z & High-Developer Retro Photo Transformation App",
   "type": "module",
   "scripts": {
-    "dev": "vite src",
+    "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -15,9 +15,4 @@
   "devDependencies": {
     "vite": "^5.1.4"
   }
-  "scripts": {
-  "dev": "vite",
-  "build": "vite build",
-  "preview": "vite preview"
-}
 }
